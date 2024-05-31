@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Window } from "@/components/Window";
-import { GalleryStatusTable } from "@/components/GalleryStatusTable";
+import { WebsiteStatusTable } from "@/components/WebsiteStatusTable";
 
 export default async function Home() {
   const appName = "My App";
@@ -18,7 +18,7 @@ export default async function Home() {
         latency={latency}
         updatedTime={updatedTime}
       />
-      <GalleryStatusTable />
+      <WebsiteStatusTable />
     </>
   );
 }
