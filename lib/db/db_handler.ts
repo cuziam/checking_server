@@ -1,4 +1,4 @@
-import DatabaseService from "@/lib/classes/DatabaseService";
+import DatabaseService from "@/lib/db/db_class";
 
 const databaseService = DatabaseService.getInstance();
 const dbConnectionConfig = {
