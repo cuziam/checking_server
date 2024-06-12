@@ -1,4 +1,7 @@
+import "./globals.css";
 import type { Metadata } from "next";
+import { pretendard } from "./font";
+
 export const metadata: Metadata = {
   title: "웹사이트 접속 상태 모니터링",
   description:
@@ -11,8 +14,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html>
-      <body>{children}</body>
+    <html className={pretendard.variable}>
+      <body className="font-pretendard">{children}</body>
     </html>
   );
 }
