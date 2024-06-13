@@ -1,6 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { pretendard } from "./font";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "웹사이트 접속 상태 모니터링",
@@ -15,7 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <html className={pretendard.variable}>
-      <body className="font-pretendard">{children}</body>
+      <body className="font-pretendard">
+        <header>
+          <NavBar />
+        </header>
+        <main className="mx-8 md:mx-24"> {children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }

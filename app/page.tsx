@@ -1,14 +1,15 @@
 "use client";
+
+import SearchBar from "@/components/SearchBar";
+import ServerStatusDetail from "@/components/ServerStatusDetail";
 import ServerStatusTable from "@/components/ServerStatusTable";
 
 export default function Page() {
   return (
     <>
-      <header></header>
-      <main className="mx-4 my-2">
-        <ServerStatusTable />
-      </main>
-      <footer></footer>
+      <ServerStatusDetail />
+      <SearchBar />
+      <ServerStatusTable />
     </>
   );
 }
