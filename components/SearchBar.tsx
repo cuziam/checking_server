@@ -1,12 +1,15 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
+
 export default function SearchBar() {
-  const websiteNames = useRef<string[]>([]); //웹사이트 이름을 저장하는 배열
-  const [searchInput, setSearchInput] = useState<string>(""); //사용자가 입력한 검색어
-  const [mostSimilarWebsites, setMostSimilarWebsites] = useState<string[]>([]); //유사한 웹사이트 이름 목록 상태
+  const websiteNames = useRef<string[]>([]); // 웹사이트 이름을 저장하는 배열
+  const dropdownRef = useRef<HTMLUListElement | null>(null); // 드롭다운 요소를 참조하기 위한 ref
+
+  const [searchInput, setSearchInput] = useState<string>(""); // 사용자가 입력한 검색어
+  const [mostSimilarWebsites, setMostSimilarWebsites] = useState<string[]>([]); // 유사한 웹사이트 이름 목록 상태
   const [currentWebsite, setCurrentWebsite] = useState<string>(""); // 현재 검색중인 웹사이트 이름 상태
 
-  //사용자가 입력한 이름으로 시작하는 웹사이트 이름 5개를 찾아서 반환하는 함수
+  // 사용자가 입력한 이름으로 시작하는 웹사이트 이름 5개를 찾아서 반환하는 함수
   const findMostSimilarWebsiteName = useCallback(() => {
     const input = searchInput.trim().toUpperCase();
     let top5Names: string[] = [];
@@ -22,7 +25,7 @@ export default function SearchBar() {
     return top5Names;
   }, [searchInput]);
 
-  //검색 입력값이 변경될 때마다 searchInput(state)을 갱신하는 함수
+  // 검색 입력값이 변경될 때마다 searchInput(state)을 갱신하는 함수
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchInput(event.target.value);
@@ -30,7 +33,7 @@ export default function SearchBar() {
     []
   );
 
-  //웹사이트 이름 목록을 서버로부터 받아서 반환하는 함수, 컴포넌트가 마운트될 때 한 번만 실행
+  // 웹사이트 이름 목록을 서버로부터 받아서 반환하는 함수, 컴포넌트가 마운트될 때 한 번만 실행
   useEffect(() => {
     async function fetchWebsiteNames() {
       try {
@@ -52,12 +55,31 @@ export default function SearchBar() {
 
   // 검색 입력값이 변경될 때마다 유사한 웹사이트 이름을 찾는 useEffect
   useEffect(() => {
-    if (searchInput) {
+    if (searchInput.length > 0) {
       console.log(searchInput);
       const mostSimilarWebsite = findMostSimilarWebsiteName();
       setMostSimilarWebsites(mostSimilarWebsite);
+    } else {
+      setMostSimilarWebsites([]); // searchInput이 비어 있으면 유사한 웹사이트 목록 비우기
     }
   }, [searchInput, findMostSimilarWebsiteName]);
+
+  // 드롭다운 외부 클릭 감지를 위한 useEffect
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setMostSimilarWebsites([]); // 외부 클릭 시 드롭다운 숨기기
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <form className="max-w-md mx-auto my-8">
@@ -75,9 +97,9 @@ export default function SearchBar() {
           >
             <path
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
             />
           </svg>
@@ -91,9 +113,12 @@ export default function SearchBar() {
           onChange={handleInputChange}
           required
         />
-        {/* mostSimilaryWebsites dropdown */}
-        {mostSimilarWebsites.length > 0 && (
-          <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-3xl shadow-lg dark:bg-gray-800 dark:border-gray-600">
+        {/* mostSimilarWebsites dropdown */}
+        {searchInput.length > 0 && mostSimilarWebsites.length > 0 && (
+          <ul
+            ref={dropdownRef}
+            className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-3xl shadow-lg dark:bg-gray-800 dark:border-gray-600"
+          >
             {mostSimilarWebsites.map((websiteName, index) => (
               <li
                 key={index}
@@ -112,7 +137,7 @@ export default function SearchBar() {
           type="submit"
           className="text-white absolute end-2.5 bottom-2.5 bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           onClick={(e) => {
-            e.preventDefault(); //form submit 방지
+            e.preventDefault(); // form submit 방지
             setCurrentWebsite(searchInput);
           }}
         >
