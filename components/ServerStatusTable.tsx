@@ -17,7 +17,7 @@ export default function ServerStatusTable() {
   useEffect(() => {
     async function fetchServerStatus() {
       try {
-        const response = await fetch("http://localhost:3000/server-status");
+        const response = await fetch(`/api/website-status`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
