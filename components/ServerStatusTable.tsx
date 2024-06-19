@@ -1,47 +1,18 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { ServerCurrentStateRecord } from "@/lib/types/ClientInterface";
 
 import ServerStatusTableRow from "./ServerStatusTableRow";
-import formatKoreanDateTime from "@/lib/utils/formatKoreanDateTime";
 
-export default function ServerStatusTable() {
-  const [serverCurrentState, setServerCurrentState] = useState<
-    ServerCurrentStateRecord[]
-  >([]); //api로 불러온 정보를 상태를 저장하는 state
+export default function ServerStatusTable({
+  serverCurrentState,
+}: {
+  serverCurrentState: ServerCurrentStateRecord[];
+}) {
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: "asc" | "desc";
   } | null>(null);
-
-  useEffect(() => {
-    async function fetchServerStatus() {
-      try {
-        const response = await fetch(`/api/website-status`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-
-        //data 파싱
-        data.forEach((record: ServerCurrentStateRecord) => {
-          record.updated_time = formatKoreanDateTime(record.updated_time);
-          record.last_error_time = formatKoreanDateTime(record.last_error_time);
-          record.last_recovery_time = formatKoreanDateTime(
-            record.last_recovery_time
-          );
-        });
-        //data를 serverCurrentState에 저장
-        setServerCurrentState(data);
-      } catch (error) {
-        console.error("Fetching error: ", error);
-      }
-    }
-
-    if (serverCurrentState.length === 0) {
-      fetchServerStatus();
-    }
-  }, [serverCurrentState]);
 
   const onSort = (key: string) => {
     let direction: "asc" | "desc" = "asc";

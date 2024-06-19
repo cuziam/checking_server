@@ -1,31 +1,21 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
-
-export default function SearchBar() {
-  const websiteNames = useRef<string[]>([]); // 웹사이트 이름을 저장하는 배열
+// SearchBar 컴포넌트
+export default function SearchBar({
+  endpoint,
+  onSearchResults,
+  relatedWords,
+}: {
+  endpoint: string; //api endpoint
+  onSearchResults: (results: any) => void; //검색 결과를 전달하는 콜백 함수
+  relatedWords?: string[]; // 연관 단어 목록
+}) {
   const dropdownRef = useRef<HTMLUListElement | null>(null); // 드롭다운 요소를 참조하기 위한 ref
 
   const [searchInput, setSearchInput] = useState<string>(""); // 사용자가 입력한 검색어
-  const [mostSimilarWebsites, setMostSimilarWebsites] = useState<string[]>([]); // 유사한 웹사이트 이름 목록 상태
-  const [currentWebsite, setCurrentWebsite] = useState<string>(""); // 현재 검색중인 웹사이트 이름 상태
+  const [mostSimilarWords, setMostSimilarWords] = useState<string[]>([]); // 연관 단어 중 가장 비슷한 단어 목록
 
-  // 사용자가 입력한 이름으로 시작하는 웹사이트 이름 5개를 찾아서 반환하는 함수
-  const findMostSimilarWebsiteName = useCallback(() => {
-    const input = searchInput.trim().toUpperCase();
-    let top5Names: string[] = [];
-    const websiteList = websiteNames.current;
-    if (websiteList.length === 0) return top5Names;
-    for (const websiteName of websiteList) {
-      if (websiteName.toUpperCase().startsWith(input)) {
-        top5Names.push(websiteName);
-      }
-      if (top5Names.length === 5) break;
-    }
-    console.log(top5Names);
-    return top5Names;
-  }, [searchInput]);
-
-  // 검색 입력값이 변경될 때마다 searchInput(state)을 갱신하는 함수
+  // 검색어가 변경될 때마다 searchInput값을 갱신하는 함수 정의
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchInput(event.target.value);
@@ -33,36 +23,39 @@ export default function SearchBar() {
     []
   );
 
-  // 웹사이트 이름 목록을 서버로부터 받아서 반환하는 함수, 컴포넌트가 마운트될 때 한 번만 실행
-  useEffect(() => {
-    async function fetchWebsiteNames() {
-      try {
-        const response = await fetch(`/api/website-names`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        websiteNames.current = data.map(
-          (record: { website_name: string }) => record.website_name
-        );
-        console.log(websiteNames.current);
-      } catch (error) {
-        console.error("Fetching error: ", error);
-      }
-    }
-    fetchWebsiteNames();
-  }, []);
+  // 연관 단어 목록에서 비슷한 단어 N개를 찾아서 반환하는 함수 정의
+  const findMostSimilarWords = useCallback(
+    (length: number) => {
+      if (relatedWords === undefined || relatedWords === null) return;
 
-  // 검색 입력값이 변경될 때마다 유사한 웹사이트 이름을 찾는 useEffect
+      const input = searchInput.trim().toUpperCase();
+      let topNWords: string[] = [];
+      const words = relatedWords;
+      if (words.length === 0) return topNWords;
+
+      for (const word of words) {
+        if (word.toUpperCase().startsWith(input)) {
+          topNWords.push(word);
+        }
+        if (topNWords.length === length) break;
+      }
+      console.log(topNWords);
+      return topNWords;
+    },
+    [searchInput, relatedWords]
+  );
+
+  // 검색 단어가 변경될 때마다 비슷한 단어 N개를 찾는 useEffect
   useEffect(() => {
+    if (relatedWords === undefined || relatedWords === null) return;
     if (searchInput.length > 0) {
       console.log(searchInput);
-      const mostSimilarWebsite = findMostSimilarWebsiteName();
-      setMostSimilarWebsites(mostSimilarWebsite);
+      const mostSimilarWebsite = findMostSimilarWords(5); // 유사한 웹사이트 이름 5개 찾기
+      setMostSimilarWords(mostSimilarWebsite ?? []);
     } else {
-      setMostSimilarWebsites([]); // searchInput이 비어 있으면 유사한 웹사이트 목록 비우기
+      setMostSimilarWords([]); // searchInput이 비어 있으면 유사한 웹사이트 목록 비우기
     }
-  }, [searchInput, findMostSimilarWebsiteName]);
+  }, [searchInput, relatedWords, findMostSimilarWords]);
 
   // 드롭다운 외부 클릭 감지를 위한 useEffect
   useEffect(() => {
@@ -71,7 +64,7 @@ export default function SearchBar() {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setMostSimilarWebsites([]); // 외부 클릭 시 드롭다운 숨기기
+        setMostSimilarWords([]); // 외부 클릭 시 드롭다운 숨기기
       }
     }
 
@@ -80,6 +73,34 @@ export default function SearchBar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // 검색어가 변경될 때 마다 가장 비슷한 이름의 검색결과를 상위 컴포넌트의 핸들러로 전달하는 useEffect
+  useEffect(() => {
+    async function fetchSearchResults() {
+      try {
+        const response = await fetch(`${endpoint}?name=${mostSimilarWords[0]}`); // 검색어를 포함한 api endpoint로 요청=>의존성 주의
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        onSearchResults(data);
+      } catch (error) {
+        console.error("Fetching error: ", error);
+      }
+    }
+
+    //디바운싱을 적용하여 검색어가 변경될 때마다 fetchSearchResults 호출
+    if (mostSimilarWords.length === 0) {
+      return;
+    }
+
+    const debouncedSearch = setTimeout(() => {
+      fetchSearchResults();
+    }, 700);
+    return () => {
+      clearTimeout(debouncedSearch);
+    };
+  }, [mostSimilarWords, endpoint, onSearchResults]);
 
   return (
     <form className="max-w-md mx-auto my-8">
@@ -114,18 +135,18 @@ export default function SearchBar() {
           required
         />
         {/* mostSimilarWebsites dropdown */}
-        {searchInput.length > 0 && mostSimilarWebsites.length > 0 && (
+        {searchInput.length > 0 && mostSimilarWords.length > 0 && (
           <ul
             ref={dropdownRef}
             className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-3xl shadow-lg dark:bg-gray-800 dark:border-gray-600"
           >
-            {mostSimilarWebsites.map((websiteName, index) => (
+            {mostSimilarWords.map((websiteName, index) => (
               <li
                 key={index}
                 className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                 onClick={() => {
                   setSearchInput(websiteName);
-                  setMostSimilarWebsites([]);
+                  setMostSimilarWords([]);
                 }}
               >
                 {websiteName}
@@ -138,7 +159,7 @@ export default function SearchBar() {
           className="text-white absolute end-2.5 bottom-2.5 bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           onClick={(e) => {
             e.preventDefault(); // form submit 방지
-            setCurrentWebsite(searchInput);
+            setMostSimilarWords([]); // 검색 버튼 클릭 시 드롭다운 숨기기
           }}
         >
           Search
