@@ -50,49 +50,56 @@ export default function ServerStatusTable({
             <tr>
               <th
                 scope="col"
-                className="px-6 py-3 font-extrabold cursor-pointer active:bg-gray-200"
+                className="px-6 py-3 font-extrabold cursor-pointer active
+"
                 onClick={() => onSort("website_name")}
               >
                 웹사이트 이름
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 font-extrabold cursor-pointer active:bg-gray-200"
+                className="px-6 py-3 font-extrabold cursor-pointer active
+"
                 onClick={() => onSort("updated_time")}
               >
                 업데이트 시각
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 font-extrabold cursor-pointer active:bg-gray-200"
+                className="px-6 py-3 font-extrabold cursor-pointer active
+"
                 onClick={() => onSort("status")}
               >
                 응답 상태
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 font-extrabold cursor-pointer active:bg-gray-200"
+                className="px-6 py-3 font-extrabold cursor-pointer active
+"
                 onClick={() => onSort("http_status")}
               >
                 HTTP 코드
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 font-extrabold cursor-pointer active:bg-gray-200"
+                className="px-6 py-3 font-extrabold cursor-pointer active
+"
                 onClick={() => onSort("latency")}
               >
                 지연시간
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 font-extrabold cursor-pointer active:bg-gray-200"
+                className="px-6 py-3 font-extrabold cursor-pointer active
+"
                 onClick={() => onSort("last_error_time")}
               >
                 마지막 에러 시각
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 font-extrabold cursor-pointer active:bg-gray-200"
+                className="px-6 py-3 font-extrabold cursor-pointer active
+"
                 onClick={() => onSort("last_recovery_time")}
               >
                 마지막 에러 회복 시각

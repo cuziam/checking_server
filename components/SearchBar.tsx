@@ -11,7 +11,6 @@ export default function SearchBar({
   relatedWords?: string[]; // 연관 단어 목록
 }) {
   const dropdownRef = useRef<HTMLUListElement | null>(null); // 드롭다운 요소를 참조하기 위한 ref
-
   const [searchInput, setSearchInput] = useState<string>(""); // 사용자가 입력한 검색어
   const [mostSimilarWords, setMostSimilarWords] = useState<string[]>([]); // 연관 단어 중 가장 비슷한 단어 목록
 

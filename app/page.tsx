@@ -1,9 +1,13 @@
 "use client";
 import { useState, useEffect, useCallback, use } from "react";
 import SearchBar from "@/components/SearchBar";
+import ServerStatusDetail from "@/components/ServerStatusDetail";
 import ServerStatusTable from "@/components/ServerStatusTable";
 
-import { ServerCurrentStateRecord } from "@/lib/types/ClientInterface";
+import {
+  ServerCurrentStateRecord,
+  ServerStateRecord,
+} from "@/lib/types/ClientInterface";
 import formatKoreanDateTime from "@/lib/utils/formatKoreanDateTime";
 
 export default function Page() {
@@ -11,9 +15,12 @@ export default function Page() {
     ServerCurrentStateRecord[]
   >([]); //api로 불러온 정보를 상태를 저장하는 state
   const [relatedWords, setRelatedWords] = useState<string[]>([]); //연관 단어 목록을 저장하는 state
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<ServerStateRecord[]>([]); //검색 결과를 저장하는 state
 
   const handleSearchResults = useCallback((results: any) => {
+    results.forEach((record: ServerStateRecord) => {
+      record.updated_time = formatKoreanDateTime(record.updated_time);
+    });
     setSearchResults(results);
   }, []);
 
@@ -75,6 +82,7 @@ export default function Page() {
         onSearchResults={handleSearchResults}
         relatedWords={relatedWords}
       />
+      <ServerStatusDetail serverState={searchResults} />
       <ServerStatusTable serverCurrentState={serverCurrentState} />
     </>
   );
