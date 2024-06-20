@@ -19,14 +19,14 @@ export default function ServerStatusTableRow(record: ServerCurrentStateRecord) {
   return (
     <tr className="h-16 border-y-2 text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <td className="px-6 py-3 font-extrabold">{record.website_name}</td>
-      <td className="px-6 py-3 font-extrabold">{record.updated_time}</td>
-      <td className={`px-6 py-3 font-extrabold ${statusColor}`}>
+      <td className="px-6 py-3 font-semibold">{record.updated_time}</td>
+      <td className={`px-6 py-3 font-semibold ${statusColor}`}>
         {record.status}
       </td>
-      <td className="px-6 py-3 font-extrabold">{record.http_status}</td>
-      <td className="px-6 py-3 font-extrabold">{record.latency}ms</td>
-      <td className="px-6 py-3 font-extrabold">{record.last_error_time}</td>
-      <td className="px-6 py-3 font-extrabold">{record.last_recovery_time}</td>
+      <td className="px-6 py-3 font-semibold">{record.http_status}</td>
+      <td className="px-6 py-3 font-semibold">{record.latency}ms</td>
+      <td className="px-6 py-3 font-semibold">{record.last_error_time}</td>
+      <td className="px-6 py-3 font-semibold">{record.last_recovery_time}</td>
     </tr>
   );
 }

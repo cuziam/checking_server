@@ -127,7 +127,7 @@ export default function SearchBar({
         <input
           type="search"
           id="default-search"
-          className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-3xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="웹사이트 이름이나 주소(URL)을 적어주세요..."
           value={searchInput}
           onChange={handleInputChange}
@@ -137,7 +137,7 @@ export default function SearchBar({
         {searchInput.length > 0 && mostSimilarWords.length > 0 && (
           <ul
             ref={dropdownRef}
-            className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-3xl shadow-lg dark:bg-gray-800 dark:border-gray-600"
+            className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-600"
           >
             {mostSimilarWords.map((websiteName, index) => (
               <li

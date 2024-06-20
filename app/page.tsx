@@ -16,6 +16,7 @@ export default function Page() {
   >([]); //api로 불러온 정보를 상태를 저장하는 state
   const [relatedWords, setRelatedWords] = useState<string[]>([]); //연관 단어 목록을 저장하는 state
   const [searchResults, setSearchResults] = useState<ServerStateRecord[]>([]); //검색 결과를 저장하는 state
+  const [showDetail, setShowDetail] = useState<boolean>(false); //상세 정보를 보여줄지 여부를 저장하는 state
 
   const handleSearchResults = useCallback((results: any) => {
     results.forEach((record: ServerStateRecord) => {
@@ -82,8 +83,18 @@ export default function Page() {
         onSearchResults={handleSearchResults}
         relatedWords={relatedWords}
       />
-      <ServerStatusDetail serverState={searchResults} />
-      <ServerStatusTable serverCurrentState={serverCurrentState} />
+      {/* 초기화면 ServerStatusTable만, 검색을 할 경우 ServerStatusDetail 렌더링 */}
+      {searchResults.length === 0 ? (
+        <>
+          <h2 className="text-center font-bold text-xl m-4">
+            {" "}
+            대한민국 주요 사이트 접속 현황
+          </h2>
+          <ServerStatusTable serverCurrentState={serverCurrentState} />
+        </>
+      ) : (
+        <ServerStatusDetail serverState={searchResults} />
+      )}
     </>
   );
 }

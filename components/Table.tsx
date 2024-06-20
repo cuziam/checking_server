@@ -47,7 +47,7 @@ export default function Table<T>({ data, columns, type }: TableProps<T>) {
   }, [data, sortConfig]);
 
   return (
-    <div className="relative w-full h-full max-h-[75vh] border-2 my-4 overflow-auto shadow-md sm:rounded-lg">
+    <div className="relative w-full h-full max-h-[75vh] border-2  rounded-lg my-4 overflow-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-gray-500 dark:text-gray-400 text-center">
         <thead className="h-16 text-base text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
           <tr>

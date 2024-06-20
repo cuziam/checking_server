@@ -5,6 +5,8 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./public/**/*.html",
+    "./node_modules/flowbite-react/lib/**/*.js",
   ],
   safelist: [
     /^bg-green-/, // 'bg-green-100', 'bg-green-900' 등을 포함하는 모든 클래스
@@ -23,7 +25,11 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require("flowbite/plugin")({
+      charts: true,
+    }),
+  ],
 };
 
 export default config;
