@@ -9,9 +9,9 @@ const config: Config = {
     "./node_modules/flowbite-react/lib/**/*.js",
   ],
   safelist: [
-    /^bg-green-/, // 'bg-green-100', 'bg-green-900' 등을 포함하는 모든 클래스
-    /^bg-red-/,
-    /^bg-yellow-/,
+    "bg-green-", // 'bg-green-100', 'bg-green-900' 등을 포함하는 모든 클래스
+    "bg-red-",
+    "bg-yellow-",
   ],
   theme: {
     extend: {

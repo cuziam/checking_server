@@ -5,7 +5,12 @@ export default function NavBar() {
       <div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <div className="relative w-10 h-10">
-            <Image src={"/main-logo.jpg"} alt="main-logo" fill={true}></Image>
+            <Image
+              src={"/main-logo.jpg"}
+              alt="main-logo"
+              fill={true}
+              sizes="33vh"
+            ></Image>
           </div>
           <span className="self-center text-2xl font-bold whitespace-nowrap dark:text-white">
             웹사이트 접속 모니터링
@@ -27,11 +32,11 @@ export default function NavBar() {
             viewBox="0 0 17 14"
           >
             <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M1 1h15M1 7.5h15M1 14h15"
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M1 1h15M1 7h15M1 13h15"
             />
           </svg>
         </button>
