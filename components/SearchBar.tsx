@@ -77,7 +77,7 @@ export default function SearchBar({
   useEffect(() => {
     async function fetchSearchResults() {
       try {
-        const response = await fetch(`${endpoint}?name=${mostSimilarWords[0]}`); // 검색어를 포함한 api endpoint로 요청=>의존성 주의
+        const response = await fetch(`${endpoint}/${mostSimilarWords[0]}`); // 검색어를 포함한 api endpoint로 요청=>의존성 주의
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

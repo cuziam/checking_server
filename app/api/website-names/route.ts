@@ -1,13 +1,11 @@
-"use server";
+export const dynamic = "force-dynamic";
 import { fetchWebsiteNames } from "@/lib/db/db_query";
-import { NextRequest, NextResponse } from "next/server";
-
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const rows = await fetchWebsiteNames();
-    return NextResponse.json(rows, { status: 200 });
+    return Response.json(rows);
   } catch (error) {
     console.error(error);
-    return NextResponse.error();
+    return Response.error();
   }
 }

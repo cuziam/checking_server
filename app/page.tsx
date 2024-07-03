@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback, use } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SearchBar from "@/components/SearchBar";
 import ServerStatusDetail from "@/components/ServerStatusDetail";
 import ServerStatusTable from "@/components/ServerStatusTable";
@@ -57,14 +57,13 @@ export default function Page() {
 
   // 연관 단어(검색어) 목록을 불러오는 useEffect
   useEffect(() => {
-    async function fetchRelatedWords(endpoint: string) {
+    async function fetchRelatedWords() {
       try {
-        const response = await fetch(endpoint);
+        const response = await fetch(`/api/website-names`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
         const dataArr = data.map((item: any) => item.website_name);
         setRelatedWords(dataArr);
       } catch (error) {
@@ -72,7 +71,7 @@ export default function Page() {
       }
     }
     if (relatedWords.length === 0) {
-      fetchRelatedWords(`/api/website-names`);
+      fetchRelatedWords();
     }
   }, [relatedWords]);
 

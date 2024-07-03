@@ -1,0 +1,29 @@
+services:
+  next-js:
+    image: nextjs
+    ports:
+      - "3000:3000"
+    build:
+      context: C:\Users\강창수\Desktop\my-app
+      dockerfile: Dockerfile
+    networks:
+      - app-net
+    depends_on:
+      - dbms
+  dbms:
+    image: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 39652520
+    networks:
+      - app-net
+    volumes:
+      - mysql-test-data:/var/lib/mysql
+networks:
+  app-net:
+    external: true
+    name: nat
+volumes:
+  mysql-test-data:
+    external: true

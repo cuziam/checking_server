@@ -3,10 +3,11 @@
 import mysql from "mysql2/promise";
 
 const pool = mysql.createPool({
-  host: process.env.test_host,
-  user: process.env.test_user,
-  password: process.env.test_user_password,
-  database: process.env.test_database,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  port: Number(process.env.DB_PORT),
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -14,6 +15,7 @@ const pool = mysql.createPool({
 
 export const fetchWebsiteCurrentState = async () => {
   const [rows] = await pool.execute("SELECT * FROM website_current_state");
+
   return rows;
 };
 
@@ -24,7 +26,6 @@ export const fetchWebsiteNames = async () => {
 
 export const fetchWebsiteStatusRecord = async (websiteName: string) => {
   //24시간 이내의 데이터만 조회
-  // 24시간 이내의 데이터만 조회
   const [rows] = await pool.execute(
     `SELECT website_name, website_url, updated_time, status, http_status, latency 
    FROM website_status_record AS record
