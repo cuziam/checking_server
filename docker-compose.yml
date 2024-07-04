@@ -1,25 +1,57 @@
 services:
   next-js:
-    image: nextjs
+    restart: always
+    image: cuziam/nextjs
     ports:
       - "3000:3000"
     build:
-      context: C:\Users\강창수\Desktop\my-app
+      context: ./nextjs
       dockerfile: Dockerfile
     networks:
       - app-net
     depends_on:
-      - dbms
+      dbms:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3000"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
   dbms:
-    image: mysql
+    restart: always
+    image: cuziam/mysql
     ports:
       - "3307:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: 39652520
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     networks:
       - app-net
     volumes:
       - mysql-test-data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/usr/bin/mysqladmin ping -h localhost -u ${MYSQL_USER} -p${MYSQL_ROOT_PASSWORD} --silent",
+        ]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+  db-update:
+    restart: on-failure
+    image: cuziam/db-update
+    ports:
+      - "3001:3001"
+    build:
+      context: ./db_update
+      dockerfile: Dockerfile
+    depends_on:
+      dbms:
+        condition: service_healthy
+    networks:
+      - app-net
 networks:
   app-net:
     external: true
