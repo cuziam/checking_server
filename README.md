@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Checking Server
 
-## Getting Started
+## 소개
+이 프로젝트는 다양한 웹사이트의 상태를 모니터링하고, 해당 서버의 응답 시간을 실시간으로 확인하기 위한 웹 애플리케이션의 'Next.js 관련 프로젝트'입니다. 이 프로젝트가 사용하는 DB의 업데이트 작업은 다른 리포지토리를 통해 관리됩니다. 사용자는 특정 웹사이트의 접속 상태를 조회하고, 다양한 지표(HTTP 상태 코드, 지연 시간 등)를 기반으로 서버의 상태를 모니터링할 수 있습니다. 이를 통해 사용자는 웹사이트의 서비스 상태를 보다 쉽게 파악하고 관리할 수 있습니다.
 
-First, run the development server:
+## 데모
+- **데모 비디오**:
+- [![YouTube 비디오](https://img.youtube.com/vi/MlfAMYurusc/0.jpg)](https://youtu.be/MlfAMYurusc)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 주요 기능
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **서버 상태 실시간 모니터링**: 주요 웹사이트의 응답 상태(HTTP 코드, 지연 시간)를 실시간으로 모니터링합니다.
+- **접속 기록 저장 및 분석**: 각 웹사이트의 접속 기록을 저장하고, 해당 데이터를 기반으로 서버 상태의 변화를 시각적으로 분석할 수 있습니다.
+- **검색 기능 제공**: 사용자가 웹사이트 이름이나 URL을 검색하여 해당 사이트의 상태를 빠르게 조회할 수 있는 기능을 제공합니다.
+- **데이터 시각화**: ApexCharts를 이용하여 서버 응답 시간 및 접속 상태 변화를 그래프 형태로 시각화하여 사용자에게 제공.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 폴더 구조
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **app**: 애플리케이션의 주요 로직 및 화면 구성 요소가 포함된 폴더입니다.
+  - **api**: API 관련 파일들이 저장되어 있습니다. (`font.ts`, `globals.css` 등)
+  - **components**: UI 컴포넌트들이 모여 있는 폴더입니다. (`NavBar.tsx`, `Footer.tsx`, `ServerStatusTable.tsx` 등)
+  - **lib**: 프로젝트에서 사용되는 라이브러리 및 유틸리티 함수들이 포함된 폴더입니다.
+  - **db**: 데이터베이스 연동 관련 파일들이 저장되어 있습니다. (`db_handler.ts`, `db_query.ts` 등)
+  - **public**: 환경 변수 파일 및 기타 설정 파일들이 저장된 폴더입니다. (`.env`, `.env.production` 등)
 
-## Learn More
+## 기술 스택
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js**: 서버 사이드 렌더링과 정적 사이트 생성 기능을 사용하여 최적의 사용자 경험을 제공합니다.
+- **Typescript**: 코드 안정성과 가독성을 위해 TypeScript로 작성하였습니다.
+- **ApexCharts**: 서버 응답 시간, 접속 상태 등 데이터 시각화를 위해 사용되었습니다.
+- **Docker**: 컨테이너화를 통해 애플리케이션의 배포 및 실행 환경을 손쉽게 관리.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 설치 및 실행 방법
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. 이 리포지토리를 클론합니다.
+   ```bash
+   git clone https://github.com/cuziam/checking_server.git
+   ```
+2. 필요한 패키지를 설치합니다.
+   ```bash
+   npm install
+   ```
+3. 개발 서버를 실행합니다.
+   ```bash
+   npm run dev
+   ```
 
-## Deploy on Vercel
+## 배포 및 운영
+- 해당 애플리케이션은 Docker 이미지를 통해 빠르게 컨테이너화하여 배포할 수 있으며, docker-compose.yml 파일을 이용하여 여러 서비스와의 통합도 가능합니다.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 주요 결과 및 인사이트
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- 다양한 웹사이트의 상태를 실시간으로 모니터링하여 장애 발생 시 빠르게 대응할 수 있습니다.
+- 데이터 시각화를 통해 시간에 따른 서버 상태의 변화를 한눈에 파악할 수 있어, 서버 관리 효율성을 높였습니다.
+
+## 라이선스
+
+이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 [LICENSE](./LICENSE) 파일을 참고하세요.
+
+## 문의
+
+궁금한 점이 있거나 문제가 발생했을 경우 [yameame320@gmail.com](mailto:yameame320@gmail.com)으로 연락하거나, Issue 탭에 남겨주세요.
